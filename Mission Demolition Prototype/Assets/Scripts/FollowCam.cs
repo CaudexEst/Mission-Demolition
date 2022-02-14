@@ -1,8 +1,8 @@
 //Created by: Ben Jenkins
 //Date created: 2/9/2022
-//Last edited: NA
+//Last edited: 2/14/2022
 //Last edited by: NA
-//Makes camera follow projectile
+//Description: Makes camera follow projectile
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,6 +11,12 @@ public class FollowCam : MonoBehaviour
 {
     static public GameObject POI;
 
+    [Header("Set in Inspector")]
+    public float easing = 0.05f;
+    public Vector2 minXY = Vector2.zero;
+
+
+    [Header("Set Dynamically")]
     public float camZ;//the desired z position fo the camera
 
     private void Awake()
@@ -22,8 +28,16 @@ public class FollowCam : MonoBehaviour
     {
         if (POI == null) return;
         Vector3 destination = POI.transform.position;
+        destination.x = Mathf.Max(minXY.x, destination.x);
+        destination.y = Mathf.Max(minXY.y, destination.y);
+
+        destination = Vector3.Lerp(transform.position, destination, easing); //interpolate from current camera to in front of projectile
+        
+        
         destination.z = camZ;
         transform.position = destination;
+
+        Camera.main.orthographicSize = destination.y + 10;
     }
     // Start is called before the first frame update
     void Start()
