@@ -1,6 +1,6 @@
 //Created by: Ben Jenkins
 //Date created: 2/9/2022
-//Last edited: NA
+//Last edited: 2/24/2022
 //Last edited by: NA
 //Description: controls slinghsot and projectile movement
 
@@ -10,9 +10,11 @@ using UnityEngine;
 
 public class Slingshot : MonoBehaviour
 {
+    static public Slingshot S;
+
     [Header("Set in Inspector")]
     public GameObject prefabProjectile;
-    public float velocityMultiplier = 8f;
+    public float velocityMultiplier = 10f;
 
     [Header("Set Dynamically")]
     public GameObject launchpoint;
@@ -25,6 +27,7 @@ public class Slingshot : MonoBehaviour
 
     private void Awake()
     {
+        S = this;
         Transform LaunchPointTrans = transform.Find("LaunchPoint");
         launchpoint = LaunchPointTrans.gameObject;
 
@@ -71,19 +74,20 @@ public class Slingshot : MonoBehaviour
             projectileRB.velocity = -mouseDelta * velocityMultiplier;
             FollowCam.POI = projectile;
             projectile = null;
+            MissionDemolition.ShotFired();
         }
     }
 
     private void OnMouseEnter()
     {
         launchpoint.SetActive(true);
-        print("Slingshot: OnMouseEnter");
+        //print("Slingshot: OnMouseEnter");
     }
 
     private void OnMouseExit()
     {
         launchpoint.SetActive(false);
-        print("Slingshot: OnMouseExit");
+        //print("Slingshot: OnMouseExit");
     }
 
     private void OnMouseDown()
